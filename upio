@@ -1,0 +1,40 @@
+#!/bin/bash
+
+bin=/usr/bin/iojs
+npm=/usr/lib/node_modules/npm
+
+echo Clean
+ls | grep iojs-v | xargs -i rm -vrf {}
+
+echo Download dist
+site=https://iojs.org/en/index.html
+dist=`curl -s $site | sed -rn 's/.*href=(http.*\.tar\.xz).*/\1/pg'`
+echo $dist
+wget $dist
+
+
+regx='iojs-v.*xz'
+dist=`ls | grep $regx | head -n 1`
+tar -xvf $dist
+rm -fv `ls | grep $regx`
+dist=`ls | grep iojs-v | head -n 1`
+
+echo Current versions:
+iojs -v
+npm -v
+
+echo
+echo Install iojs bin:
+rm -vf $bin
+mv -vf $dist/bin/iojs $bin
+
+echo
+echo Install new npm:
+
+rm -vr $npm
+mv -vf $dist/lib/node_modules/npm $npm
+
+echo
+echo Done
+
+#EOF#

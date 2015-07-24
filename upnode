@@ -1,0 +1,44 @@
+#!/bin/bash
+
+bin=/usr/bin/node
+npm=/usr/lib/node_modules/npm
+npmbin=/usr/bin/npm
+
+echo Clean
+ls | grep node-v | xargs -i rm -vrf {}
+
+echo Download dist
+site=https://nodejs.org/download/
+dist=`curl -s $site | sed -rn 's/.*(http.*linux-x64\.tar\.gz).*/\1/pg'`
+echo $dist
+wget $dist
+
+regx='node-v.*gz'
+dist=`ls | grep $regx | head -n 1`
+tar -xzvf $dist
+rm -fv `ls | grep $regx`
+dist=`ls | grep node-v | head -n 1`
+
+echo Current versions:
+iojs -v
+npm -v
+
+echo
+echo Install iojs bin:
+rm -vf $bin
+mv -vf $dist/bin/node $bin
+
+echo
+echo Install new npm:
+
+rm -vr $npm
+mv -vf $dist/lib/node_modules/npm $npm
+
+rm -vf $npmbin
+#ln -vfs $npm/bin/npm $npmbin
+cp -vf npm $npmbin
+
+echo
+echo Done
+
+#EOF#
