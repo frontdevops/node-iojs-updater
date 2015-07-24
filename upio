@@ -3,8 +3,12 @@
 bin=/usr/bin/iojs
 npm=/usr/lib/node_modules/npm
 
-echo Clean
-ls | grep iojs-v | xargs -i rm -vrf {}
+_clear() {
+	echo Clean
+	ls | grep iojs-v | xargs -i rm -vrf {}
+}
+
+_clear
 
 echo Download dist
 site=https://iojs.org/en/index.html
@@ -33,6 +37,8 @@ echo Install new npm:
 
 rm -vr $npm
 mv -vf $dist/lib/node_modules/npm $npm
+
+_clear
 
 echo
 echo Done

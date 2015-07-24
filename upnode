@@ -4,8 +4,12 @@ bin=/usr/bin/node
 npm=/usr/lib/node_modules/npm
 npmbin=/usr/bin/npm
 
-echo Clean
-ls | grep node-v | xargs -i rm -vrf {}
+_clear() {
+	echo Clean
+	ls | grep node-v | xargs -i rm -vrf {}
+}
+
+_clear
 
 echo Download dist
 site=https://nodejs.org/download/
@@ -37,6 +41,8 @@ mv -vf $dist/lib/node_modules/npm $npm
 rm -vf $npmbin
 #ln -vfs $npm/bin/npm $npmbin
 cp -vf npm $npmbin
+
+_clear
 
 echo
 echo Done
